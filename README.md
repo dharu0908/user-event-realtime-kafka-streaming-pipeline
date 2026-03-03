@@ -1,192 +1,138 @@
-Here is a professional, recruiter-ready README.md tailored specifically to your project architecture (Kafka → AWS RDS → Databricks → Analytics Dashboards).
+# User Event Real-Time Kafka Streaming Pipeline
 
-You can copy-paste this directly into your GitHub README.md.
+This project demonstrates a real-time event streaming pipeline built using Apache Kafka.  
+It simulates user activity events, streams them through Kafka, stores them in PostgreSQL (AWS RDS), and analyzes the data using Databricks dashboards.
 
-🚀 Real-Time User Event Streaming Pipeline (Kafka → AWS → Databricks)
+The goal of this project is to showcase an end-to-end data engineering workflow using modern streaming architecture.
 
-A complete end-to-end real-time data engineering pipeline that simulates user activity events, streams them using Apache Kafka, stores them in AWS RDS (PostgreSQL), and performs advanced analytics using Databricks.
+---
 
-This project demonstrates real-world data engineering concepts including event streaming, cloud storage, structured analytics, and business intelligence.
+## Architecture
 
-🏗️ Architecture Overview
-🔄 Data Flow
+Python Producer → Kafka → Python Consumer → PostgreSQL (AWS RDS) → Databricks Dashboard
 
-Producer (Python + Kafka)
+### Flow Overview
 
-Generates synthetic user activity events
+1. The producer generates synthetic user events such as:
+   - view
+   - add_to_cart
+   - purchase
 
-Event types: view, add_to_cart, purchase
+2. Events are pushed to a Kafka topic.
 
-Publishes events to Kafka topic user_events
+3. The consumer reads events from Kafka and writes them into a PostgreSQL table.
 
-Kafka (Dockerized)
+4. Databricks notebooks connect to PostgreSQL to create analytics dashboards.
 
-Zookeeper + Kafka broker using Docker Compose
+---
 
-Handles real-time event streaming
+## Tech Stack
 
-Consumer (Python)
+- Apache Kafka
+- Python
+- Docker & Docker Compose
+- PostgreSQL (AWS RDS)
+- Databricks (SQL + Dashboards)
+- Faker (for data generation)
 
-Subscribes to user_events
+---
 
-Processes messages in real-time
+## Project Structure
 
-Inserts structured records into AWS RDS (PostgreSQL)
-
-AWS RDS (PostgreSQL)
-
-Stores event data in structured table
-
-Acts as persistent cloud storage layer
-
-Databricks
-
-Connects to AWS RDS
-
-Performs analytics using SQL notebooks
-
-Builds business dashboards
-
-📂 Project Structure
-user-event-realtime-kafka-streaming-pipeline/
-│
-├── producer.py                 # Kafka event generator
-├── consumer.py                 # Kafka consumer → AWS RDS
-├── docker-compose.yml          # Kafka + Zookeeper setup
-│
+```
+.
+├── producer.py
+├── consumer.py
+├── docker-compose.yml
+├── requirements.txt
 ├── databricks/
-│   ├── total_event.dbquery.ipynb
-│   ├── total_purchases.dbquery.ipynb
-│   ├── total_customer.dbquery.ipynb
-│   ├── top_10_users.dbquery.ipynb
-│   ├── top_10_product.dbquery.ipynb
-│   ├── conversion_of_top_10_products.dbquery.ipynb
-│   ├── purchase_conversion_rate.dbquery.ipynb
-│   └── funnel.dbquery.ipynb
-🧠 Event Schema
+│   ├── Total Customer.dbquery.ipynb
+│   ├── Top 10 product.dbquery.ipynb
+│   ├── Top 10 users.dbquery.ipynb
+│   ├── Purchase_conversion_rate.dbquery.ipynb
+│   └── Conversion of top 10 products.dbquery.ipynb
+└── README.md
+```
 
-Each event contains:
+---
 
-{
-  "user_id": int,
-  "product_id": int,
-  "event_type": "view | add_to_cart | purchase",
-  "timestamp": "UTC timestamp"
-}
+## How to Run
 
-Stored in AWS RDS table:
+### 1. Start Kafka
 
-user_events (
-    id SERIAL PRIMARY KEY,
-    user_id INT,
-    product_id INT,
-    event_type VARCHAR(50),
-    timestamp TIMESTAMP
-)
-🛠️ Tech Stack
-
-Apache Kafka
-
-Python
-
-Docker & Docker Compose
-
-AWS RDS (PostgreSQL)
-
-Databricks
-
-SQL Analytics
-
-Faker (Synthetic Data Generation)
-
-⚙️ How to Run the Project
-1️⃣ Start Kafka
+```
 docker-compose up -d
-2️⃣ Start Producer
+```
+
+### 2. Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+### 3. Run Producer
+
+```
 python producer.py
+```
 
-This will continuously generate user events every second.
+### 4. Run Consumer
 
-3️⃣ Start Consumer
+```
 python consumer.py
+```
 
-This:
+Once both are running, events will continuously flow into PostgreSQL.
 
-Listens to Kafka topic
+---
 
-Inserts events into AWS RDS
+## Sample Event Format
 
-Creates table automatically if not exists
+```json
+{
+  "user_id": 1023,
+  "product_id": 451,
+  "event_type": "purchase",
+  "timestamp": "2025-02-01T10:23:45"
+}
+```
 
-4️⃣ Connect Databricks
+---
 
-Create a JDBC connection to AWS RDS
+## Dashboards & Analytics
 
-Import notebooks from /databricks folder
+The Databricks notebooks generate insights such as:
 
-Run SQL queries
+- Total events
+- Total customers
+- Top 10 products
+- Top 10 users
+- Purchase conversion rate
+- Product conversion analysis
 
-Build dashboards
+---
 
-📊 Analytics Implemented in Databricks
-🔢 Core Metrics
+## What This Project Demonstrates
 
-Total Events
+- Real-time event streaming using Kafka
+- Producer–consumer architecture
+- Writing streaming data to a relational database
+- SQL-based analytics on live event data
+- Building an end-to-end data pipeline
 
-Total Purchases
+---
 
-Total Customers
+## Possible Improvements
 
-🏆 Ranking Analytics
+- Add Spark Structured Streaming
+- Introduce schema validation
+- Add monitoring and logging
+- Containerize the consumer application
+- Deploy to cloud infrastructure
 
-Top 10 Users by Purchases
+---
 
-Top 10 Products by Engagement
+## Author
 
-📈 Conversion Analytics
-
-Purchase Conversion Rate
-
-Conversion of Top 10 Products
-
-User Funnel Analysis (View → Cart → Purchase)
-
-📈 Business Use Cases
-
-This pipeline can simulate real-world systems like:
-
-E-commerce clickstream tracking
-
-Real-time product recommendation systems
-
-Marketing campaign conversion tracking
-
-Customer behavior analytics
-
-Sales funnel optimization
-
-🚀 What This Project Demonstrates
-
-✔ Real-time event streaming
-✔ Cloud database integration (AWS RDS)
-✔ Data ingestion and persistence
-✔ Structured analytics using Databricks
-✔ Funnel and conversion rate analysis
-✔ End-to-end data engineering pipeline
-
-🔮 Future Improvements
-
-Add Spark Structured Streaming instead of basic consumer
-
-Integrate AWS S3 as data lake layer
-
-Add Airflow orchestration
-
-Implement real-time dashboard with Power BI
-
-Add schema validation using Avro
-
-👨‍💻 Author
-
-Dharmik Patel
-Data Engineering | Cloud | Real-Time Streaming | Analytics
+Dharmik  
+Data Engineering & Analytics
