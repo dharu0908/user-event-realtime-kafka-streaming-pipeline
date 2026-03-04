@@ -1,4 +1,4 @@
-# 🚀 User Event Real-Time Kafka Streaming Pipeline
+# User Event Real-Time Kafka Streaming Pipeline
 
 An end-to-end data engineering project that simulates real-time user activity on an e-commerce platform. Events stream through Kafka into PostgreSQL on AWS RDS, and the collected data is analyzed through Databricks dashboards built on Delta tables.
 
