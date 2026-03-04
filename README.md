@@ -1,39 +1,43 @@
-# User Event Real-Time Kafka Streaming Pipeline
+# 🚀 User Event Real-Time Kafka Streaming Pipeline
 
-This project demonstrates a real-time event streaming pipeline built using Apache Kafka.  
-It simulates user activity events, streams them through Kafka, stores them in PostgreSQL (AWS RDS), and analyzes the data using Databricks dashboards.
+A end-to-end data engineering project that simulates real-time user activity on an e-commerce platform — events flow from a Python producer through Kafka, land in PostgreSQL on AWS RDS, and get analyzed through Databricks dashboards.
 
-The goal of this project is to showcase an end-to-end data engineering workflow using modern streaming architecture.
+Built to demonstrate modern streaming architecture using tools that actually matter in production.
 
 ---
 
 ## Architecture
 
-Python Producer → Kafka → Python Consumer → PostgreSQL (AWS RDS) → Databricks Dashboard
+![Pipeline Architecture](architecture.svg)
 
-### Flow Overview
+**Python Producer → Apache Kafka → Python Consumer → PostgreSQL (AWS RDS) → Databricks**
 
-1. The producer generates synthetic user events such as:
-   - view
-   - add_to_cart
-   - purchase
+Here's how data moves through the system:
 
-2. Events are pushed to a Kafka topic.
+1. The **producer** generates synthetic user events using Faker — things like product views, cart additions, and purchases
+2. Events get pushed to a Kafka topic running in Docker
+3. The **consumer** reads from Kafka and writes records into a PostgreSQL table on AWS RDS
+4. **Databricks notebooks** connect to the database via JDBC and power the analytics dashboards
 
-3. The consumer reads events from Kafka and writes them into a PostgreSQL table.
+---
 
-4. Databricks notebooks connect to PostgreSQL to create analytics dashboards.
+## Dashboard
+
+![Databricks Dashboard](Screenshot%202026-03-02%20233601.png)
+
+The dashboards surface key e-commerce metrics — conversion rates, top products, most active users, and total event volume — all refreshed from live data in PostgreSQL.
 
 ---
 
 ## Tech Stack
 
-- Apache Kafka
-- Python
-- Docker & Docker Compose
-- PostgreSQL (AWS RDS)
-- Databricks (SQL + Dashboards)
-- Faker (for data generation)
+| Layer | Tool |
+|---|---|
+| Event Generation | Python, Faker |
+| Message Broker | Apache Kafka |
+| Infrastructure | Docker, Docker Compose |
+| Storage | PostgreSQL on AWS RDS |
+| Analytics | Databricks (SQL + Dashboards) |
 
 ---
 
@@ -41,52 +45,57 @@ Python Producer → Kafka → Python Consumer → PostgreSQL (AWS RDS) → Datab
 
 ```
 .
-├── producer.py
-├── consumer.py
-├── docker-compose.yml
-├── requirements.txt
+├── producer/
+│   └── producer.py
+├── consumer/
+│   └── consumer.py
 ├── databricks/
 │   ├── Total Customer.dbquery.ipynb
 │   ├── Top 10 product.dbquery.ipynb
 │   ├── Top 10 users.dbquery.ipynb
 │   ├── Purchase_conversion_rate.dbquery.ipynb
-│   └── Conversion of top 10 products.dbquery.ipynb
+│   ├── Conversion of top 10 products.dbquery.ipynb
+│   ├── funnel.dbquery.ipynb
+│   ├── total_event.dbquery.ipynb
+│   └── total_puchases.dbquery.ipynb
+├── docker-compose.yml
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## How to Run
+## Getting Started
 
 ### 1. Start Kafka
 
-```
+```bash
 docker-compose up -d
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run Producer
+### 3. Run the producer
 
-```
-python producer.py
-```
-
-### 4. Run Consumer
-
-```
-python consumer.py
+```bash
+python producer/producer.py
 ```
 
-Once both are running, events will continuously flow into PostgreSQL.
+### 4. Run the consumer
+
+```bash
+python consumer/consumer.py
+```
+
+Once both are running, events flow continuously into PostgreSQL. Open your Databricks workspace and run the notebooks to see the dashboards update.
 
 ---
 
-## Sample Event Format
+## Sample Event
 
 ```json
 {
@@ -97,42 +106,46 @@ Once both are running, events will continuously flow into PostgreSQL.
 }
 ```
 
+Three event types are simulated: `view`, `add_to_cart`, and `purchase` — enough to calculate a real purchase conversion funnel.
+
 ---
 
-## Dashboards & Analytics
+## Databricks Analytics
 
-The Databricks notebooks generate insights such as:
+Each notebook in the `databricks/` folder targets a specific business question:
 
-- Total events
-- Total customers
-- Top 10 products
-- Top 10 users
-- Purchase conversion rate
-- Product conversion analysis
+- **Total Events** — overall pipeline throughput
+- **Total Customers** — unique users generating events
+- **Total Purchases** — revenue-generating actions
+- **Top 10 Products** — most interacted-with items
+- **Top 10 Users** — most active users by event count
+- **Purchase Conversion Rate** — view → purchase funnel
+- **Conversion of Top 10 Products** — per-product conversion breakdown
+- **Funnel Analysis** — full event funnel visualization
 
 ---
 
 ## What This Project Demonstrates
 
-- Real-time event streaming using Kafka
-- Producer–consumer architecture
-- Writing streaming data to a relational database
-- SQL-based analytics on live event data
-- Building an end-to-end data pipeline
+- Setting up a working Kafka producer–consumer pipeline from scratch
+- Streaming data from Kafka into a relational database in real time
+- Running SQL analytics on live event data using Databricks
+- Connecting cloud storage (AWS RDS) with a lakehouse analytics platform
+- Building an end-to-end data engineering workflow with free/open-source tooling
 
 ---
 
-## Possible Improvements
+## Possible Next Steps
 
-- Add Spark Structured Streaming
-- Introduce schema validation
-- Add monitoring and logging
-- Containerize the consumer application
-- Deploy to cloud infrastructure
+- Add **Spark Structured Streaming** to process events before they hit the database
+- Introduce **schema validation** with Confluent Schema Registry / Avro
+- Set up **monitoring** with Kafka UI or Prometheus + Grafana
+- Containerize the consumer and deploy the whole stack to the cloud
+- Add **dbt** on top of PostgreSQL for transformation layer
 
 ---
 
 ## Author
 
-Dharmik  
-Data Engineering & Analytics
+**Dharmik** — Data Engineering & Analytics  
+Feel free to connect or reach out if you have questions about the project.
