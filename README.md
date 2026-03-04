@@ -6,7 +6,8 @@ An end-to-end data engineering project that simulates real-time user activity on
 
 ## Architecture
 
-![Pipeline Architecture](architecture.svg)
+
+![Databricks Dashboard](databricks%20analytics%20and%20dashboard/Screenshot%202026-03-03%195353.png)
 
 The project is split into two distinct layers:
 
