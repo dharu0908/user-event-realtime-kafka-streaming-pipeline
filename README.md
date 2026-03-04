@@ -22,7 +22,7 @@ Keeping ingestion and analytics as separate layers mirrors how production data p
 
 ## Dashboard
 
-(![Databricks Dashboard](databricks%20analytics%20and%20dashboard/Screenshot%202026-03-02%20233601.png))
+![Databricks Dashboard](databricks%20analytics%20and%20dashboard/Screenshot%202026-03-02%20233601.png)
 
 ---
 
